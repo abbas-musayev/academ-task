@@ -19,7 +19,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .produces(ImmutableSet.of(MediaType.APPLICATION_JSON_VALUE))
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("az.crocusoft.crocusoft.task.controller"))
+                .apis(RequestHandlerSelectors.basePackage("az.crocusoft.crocusofttask2.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }

@@ -9,6 +9,7 @@ import az.crocusoft.crocusofttask2.dao.repository.CoursesRepo;
 import az.crocusoft.crocusofttask2.dao.repository.StudentsRepo;
 import az.crocusoft.crocusofttask2.dao.repository.TeachersRepo;
 import az.crocusoft.crocusofttask2.dto.request.CoursesRequestDto;
+import az.crocusoft.crocusofttask2.dto.request.StudentsRequestDto;
 import az.crocusoft.crocusofttask2.dto.response.CoursesResponseDto;
 import az.crocusoft.crocusofttask2.exception.CustomNotFoundException;
 import az.crocusoft.crocusofttask2.services.CoursesService;
@@ -46,20 +47,44 @@ public class CoursesServiceImpl implements CoursesService {
 
     @Override
     public String saveCourses(CoursesRequestDto request) {
-        List<Students> studentsList= new ArrayList<>();
-        for (Long item : request.getStudentsId()) {
-            studentsList.add(studentsRepo.getById(item));
+
+        List<StudentsRequestDto> students = request.getStudents();
+
+        List<Students> list = new ArrayList<>();
+        for (StudentsRequestDto item : students) {
+            list.add(studentsRepo.findById(item.getId())
+                    .orElseThrow(()-> new CustomNotFoundException("Students Id is Null!")));
         }
-        Teachers teachers = teachersRepo.getById(request.getId());
-        Academy academy = academyRepo.getById(request.getAcademyId());
-        Courses courses = modelMapper.map(request, Courses.class);
 
-        courses.setTeachers(teachers);
-        courses.setStudents(studentsList);
-        courses.setAcademy(academy);
+        Teachers teachers = teachersRepo.findById(request.getTeachers().getId())
+                .orElseThrow(() -> new CustomNotFoundException("Teacher Id is Null!"));
+        Academy academy = academyRepo.findById(request.getAcademy().getId())
+                .orElseThrow(() -> new CustomNotFoundException("Academy Id is Null!"));
 
-        coursesRepo.save(courses);
+        Courses map = modelMapper.map(request, Courses.class);
+        map.setStudents(list);
+        map.setTeachers(teachers);
+        map.setAcademy(academy);
+
+        log.info("CoursesServiceImpl: saveCourses: Courses Entity {}",map);
+        coursesRepo.save(map);
         return "Courses Saved!";
+
+
+//        List<Students> studentsList= new ArrayList<>();
+//        for (Long item : request.getStudentsId()) {
+//            studentsList.add(studentsRepo.getById(item));
+//        }
+//        Teachers teachers = teachersRepo.getById(request.getId());
+//        Academy academy = academyRepo.getById(request.getAcademyId());
+//        Courses courses = modelMapper.map(request, Courses.class);
+//
+//        courses.setTeachers(teachers);
+//        courses.setStudents(studentsList);
+//        courses.setAcademy(academy);
+//
+//        coursesRepo.save(courses);
+//        return "Courses Saved!";
 
     }
 
@@ -85,24 +110,54 @@ public class CoursesServiceImpl implements CoursesService {
 
     @Override
     public String updateCourses(CoursesRequestDto request) {
+
         if (request.getId()==null){
-            return "Id is Null!";
+            throw new CustomNotFoundException("Course Id is Null!");
         }
-        List<Students> studentsList= new ArrayList<>();
-        for (Long item : request.getStudentsId()) {
-            studentsList.add(studentsRepo.getById(item));
+
+        List<Students> list = new ArrayList<>();
+        for (StudentsRequestDto item : request.getStudents()) {
+            list.add(studentsRepo.findById(item.getId())
+                    .orElseThrow(()-> new CustomNotFoundException("Students Id is Null!")));
         }
-        Teachers teachers = teachersRepo.getById(request.getId());
-        Academy academy = academyRepo.getById(request.getAcademyId());
-        Courses courses = modelMapper.map(request, Courses.class);
 
-        courses.setTeachers(teachers);
-        courses.setStudents(studentsList);
-        courses.setAcademy(academy);
+        Teachers teachers = teachersRepo.findById(request.getTeachers().getId())
+                .orElseThrow(() -> new CustomNotFoundException("Teacher Id is Null!"));
+        Academy academy = academyRepo.findById(request.getAcademy().getId())
+                .orElseThrow(() -> new CustomNotFoundException("Academy Id is Null!"));
 
-        coursesRepo.save(courses);
+        Courses map = modelMapper.map(request, Courses.class);
+        map.setStudents(list);
+        map.setTeachers(teachers);
+        map.setAcademy(academy);
+
+        log.info("CoursesServiceImpl: saveCourses: Courses Entity {}",map);
+        coursesRepo.save(map);
 
         return "Courses Saved!";
+
+
+
+
+
+//        if (request.getId()==null){
+//            return "Id is Null!";
+//        }
+//        List<Students> studentsList= new ArrayList<>();
+//        for (Long item : request.getStudentsId()) {
+//            studentsList.add(studentsRepo.getById(item));
+//        }
+//        Teachers teachers = teachersRepo.getById(request.getId());
+//        Academy academy = academyRepo.getById(request.getAcademyId());
+//        Courses courses = modelMapper.map(request, Courses.class);
+//
+//        courses.setTeachers(teachers);
+//        courses.setStudents(studentsList);
+//        courses.setAcademy(academy);
+//
+//        coursesRepo.save(courses);
+//
+//        return "Courses Saved!";
     }
 
     @Override

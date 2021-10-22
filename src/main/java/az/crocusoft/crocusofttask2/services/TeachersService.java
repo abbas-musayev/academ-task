@@ -7,7 +7,8 @@ import java.util.List;
 
 public interface TeachersService {
 
-    String saveTeachers(TeachersRequestDto dto);
+    String saveTeachers(TeachersRequestDto request);
+    String updateTeachers(TeachersRequestDto request);
     List<TeachersResponseDto> findAllTeachersByCoursesName(String name);
 
 }

@@ -1,5 +1,8 @@
 package az.crocusoft.crocusofttask2.dto.request;
 
+import az.crocusoft.crocusofttask2.dto.response.AcademyResponseDto;
+import az.crocusoft.crocusofttask2.dto.response.StudentsResponseDto;
+import az.crocusoft.crocusofttask2.dto.response.TeachersResponseDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +11,7 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -22,11 +26,18 @@ public class CoursesRequestDto  implements Serializable {
     @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate expirationDate;
 
-    Long teachersId;
+    TeachersRequestDto teachers;
 
-    Long[] studentsId;
+    List<StudentsRequestDto> students;
 
-    Long academyId;
+    AcademyRequestDto academy;
+
+//    Long teachersId;
+//
+//    List<Long> studentsId;
+//
+//    Long academyId;
+
 
 
 }

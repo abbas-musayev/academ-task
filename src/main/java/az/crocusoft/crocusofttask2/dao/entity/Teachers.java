@@ -1,6 +1,7 @@
 package az.crocusoft.crocusofttask2.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;

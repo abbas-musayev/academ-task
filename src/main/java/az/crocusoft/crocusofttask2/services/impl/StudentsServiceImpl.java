@@ -4,8 +4,10 @@ import az.crocusoft.crocusofttask2.dao.entity.Courses;
 import az.crocusoft.crocusofttask2.dao.entity.Students;
 import az.crocusoft.crocusofttask2.dao.repository.CoursesRepo;
 import az.crocusoft.crocusofttask2.dao.repository.StudentsRepo;
+import az.crocusoft.crocusofttask2.dto.request.CoursesRequestDto;
 import az.crocusoft.crocusofttask2.dto.request.StudentsRequestDto;
 import az.crocusoft.crocusofttask2.dto.response.StudentsResponseDto;
+import az.crocusoft.crocusofttask2.exception.CustomNotFoundException;
 import az.crocusoft.crocusofttask2.services.StudentsService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -34,31 +36,38 @@ public class StudentsServiceImpl implements StudentsService {
     }
 
     @Override
-    public String saveStudents(StudentsRequestDto dto) {
-        Students students = modelMapper.map(dto, Students.class);
+    public String saveStudents(StudentsRequestDto request) {
+        Students students = modelMapper.map(request, Students.class);
 
+        log.info("StudentsServiceImpl: StudentEntity {}",students);
+
+        List<CoursesRequestDto> courses = request.getCourses();
         List<Courses> courseList = new ArrayList<>();
-        for (Long item : dto.getCourseId()) {
-            Courses courses = coursesRepo.getById(item);
-            courseList.add(courses);
+        for (CoursesRequestDto item : courses) {
+            courseList.add(
+                    coursesRepo.findById(item.getId())
+                    .orElseThrow(()-> new CustomNotFoundException("Course Id is Null!")));
         }
+
         students.setCourses(courseList);
         studentsRepo.save(students);
         return "Students Saved!";
     }
 
     @Override
-    public String updateStudents(StudentsRequestDto dto) {
+    public String updateStudents(StudentsRequestDto request) {
 
-        if (dto.getId()==null){
-            return "Id is Null!";
+        if (request.getId()==null){
+            return "Student Id is Null!";
         }
-        Students map = modelMapper.map(dto, Students.class);
+        Students map = modelMapper.map(request, Students.class);
 
+        List<CoursesRequestDto> courses = request.getCourses();
         List<Courses> list = new ArrayList<>();
-        for (Long item : dto.getCourseId()) {
-            Courses byId = coursesRepo.getById(item);
-            list.add(byId);
+        for (CoursesRequestDto item : courses) {
+            list.add(
+                    coursesRepo.findById(item.getId())
+                            .orElseThrow(()-> new CustomNotFoundException("Course Id is Null!")));
         }
         map.setCourses(list);
         studentsRepo.save(map);

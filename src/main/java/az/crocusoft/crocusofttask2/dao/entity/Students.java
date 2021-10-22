@@ -1,6 +1,7 @@
 package az.crocusoft.crocusofttask2.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
@@ -21,6 +22,7 @@ public class Students implements Serializable {
     String name;
     String surname;
     String email;
+
 
     @JsonBackReference
     @ManyToMany(fetch = FetchType.LAZY)

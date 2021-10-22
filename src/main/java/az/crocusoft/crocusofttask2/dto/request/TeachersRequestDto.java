@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -17,5 +18,7 @@ public class TeachersRequestDto implements Serializable {
     String surname;
     String email;
 
-    Long[] coursesId;
+//    Long[] coursesId;
+    List<CoursesRequestDto> courses;
 }
+

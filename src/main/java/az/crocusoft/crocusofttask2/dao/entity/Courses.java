@@ -40,7 +40,7 @@ public class Courses {
     )
     List<Students> students;
 
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "academy_id",referencedColumnName = "id")
     Academy academy;

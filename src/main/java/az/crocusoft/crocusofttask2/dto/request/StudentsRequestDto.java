@@ -1,26 +1,22 @@
 package az.crocusoft.crocusofttask2.dto.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.util.List;
 
 @ToString
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class StudentsRequestDto {
     Long id;
     String name;
     String surname;
     String email;
 
-    Long[] courseId;
-
-    public StudentsRequestDto() {
-    }
-
-    public StudentsRequestDto(Long id, String name, String surname, String email, Long[] courseId) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.courseId = courseId;
-    }
+//    Long[] courseId;
+    List<CoursesRequestDto> courses;
 }

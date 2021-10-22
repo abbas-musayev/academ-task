@@ -1,5 +1,6 @@
 package az.crocusoft.crocusofttask2.dao.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +24,8 @@ public class Academy implements Serializable {
     private String name;
     private String address;
 
-    @JsonManagedReference
+
+    @JsonBackReference
     @OneToMany(mappedBy = "academy",fetch = FetchType.LAZY)
     private List<Courses> coursesList;
 
