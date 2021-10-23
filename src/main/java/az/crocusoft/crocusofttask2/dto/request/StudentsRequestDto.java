@@ -16,7 +16,5 @@ public class StudentsRequestDto {
     String name;
     String surname;
     String email;
-
-//    Long[] courseId;
     List<CoursesRequestDto> courses;
 }

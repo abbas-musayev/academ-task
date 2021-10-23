@@ -32,12 +32,5 @@ public class CoursesRequestDto  implements Serializable {
 
     AcademyRequestDto academy;
 
-//    Long teachersId;
-//
-//    List<Long> studentsId;
-//
-//    Long academyId;
-
-
 
 }

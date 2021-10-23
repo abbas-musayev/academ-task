@@ -17,8 +17,6 @@ public class TeachersRequestDto implements Serializable {
     String name;
     String surname;
     String email;
-
-//    Long[] coursesId;
     List<CoursesRequestDto> courses;
 }
 
