@@ -14,19 +14,19 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
 @Table(name = "academy")
 public class Academy implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String address;
 
 
     @JsonBackReference
-    @OneToMany(mappedBy = "academy",fetch = FetchType.LAZY)
+    @ToString.Exclude
+    @OneToMany(mappedBy = "academy")
     private List<Courses> coursesList;
 
 

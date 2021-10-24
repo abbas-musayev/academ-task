@@ -16,5 +16,6 @@ public class AcademyRequestDto{
     private Long id;
     private String name;
     private String address;
+
     private List<CoursesRequestDto> coursesList;
 }

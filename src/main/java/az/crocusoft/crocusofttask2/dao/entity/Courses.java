@@ -12,35 +12,35 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "courses")
 public class Courses {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
     LocalDate startDate;
     LocalDate expirationDate;
 
-    @JsonManagedReference
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
-            @JoinColumn(name = "teachers",referencedColumnName = "id")
+    @JoinColumn(name = "teachers",referencedColumnName = "id")
     Teachers teachers;
 
-    @JsonManagedReference
-    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonBackReference
+    @ManyToMany()
     @JoinTable(
-            name = "students_courses",
+            name = "course_student",
             joinColumns = @JoinColumn(
-                    name = "student_id"),
+                    name = "course_id"),
             inverseJoinColumns = @JoinColumn(
-                    name = "course_id")
+                    name = "student_id")
     )
     List<Students> students;
 
     @JsonManagedReference
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "academy_id",referencedColumnName = "id")
     Academy academy;

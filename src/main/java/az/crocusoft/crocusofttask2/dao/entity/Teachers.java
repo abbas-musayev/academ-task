@@ -1,7 +1,6 @@
 package az.crocusoft.crocusofttask2.dao.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AccessLevel;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
@@ -13,18 +12,19 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "teachers")
-@ToString
 public class Teachers implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
     String surname;
     String email;
 
+    @ToString.Exclude
     @JsonBackReference
-    @OneToMany(mappedBy = "teachers",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "teachers")
+//    @OneToMany
     List<Courses> courses;
 
     public Teachers() {

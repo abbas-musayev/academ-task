@@ -12,7 +12,9 @@ import java.util.List;
 public interface TeachersRepo extends JpaRepository<Teachers,Long> {
 
 //    Kursun adina gore bu kursu kecen muellimin tapilmagi
-    @Query("select t from Teachers t join fetch t.courses c where c.name=:name")
-    List<Teachers> findAllTeachersByCoursesName(@Param("name") String name);
+    @Query("select t from Teachers t join fetch t.courses c where c.name like %:name%")
+    Teachers findAllTeachersByCoursesName(@Param("name") String name);
+
+
 
 }

@@ -1,5 +1,6 @@
 package az.crocusoft.crocusofttask2.dao.repository;
 
+import az.crocusoft.crocusofttask2.dao.entity.Courses;
 import az.crocusoft.crocusofttask2.dao.entity.Students;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +18,7 @@ public interface StudentsRepo extends JpaRepository<Students,Long> {
 //     Kursun adina gore daxilinde olan telebelerin tapilmagi
     @Query("select s from Students s join fetch s.courses c where c.name=:name")
     List<Students> findStudentsByCourseName(@Param("name") String courseName);
+
+    @Query("select s from Students s join fetch s.courses c where c.id=:id")
+    List<Students> findStudentsOfCourseById(@Param("id") Long id);
 }

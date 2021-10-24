@@ -7,4 +7,6 @@ public interface AcademyService {
 
     String saveAcademy(AcademyRequestDto dto);
 
+
+
 }

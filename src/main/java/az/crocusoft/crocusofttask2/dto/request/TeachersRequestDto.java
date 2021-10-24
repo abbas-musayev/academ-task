@@ -17,6 +17,8 @@ public class TeachersRequestDto implements Serializable {
     String name;
     String surname;
     String email;
+
+    @ToString.Exclude
     List<CoursesRequestDto> courses;
 }
 

@@ -15,7 +15,6 @@ import java.util.List;
 public class CoursesController {
 
     private final Logger log = LoggerFactory.getLogger(CoursesController.class);
-
     private final CoursesService coursesService;
 
     public CoursesController(CoursesService coursesService) {
@@ -24,8 +23,6 @@ public class CoursesController {
 
     @PostMapping
     public ResponseEntity<String> saveCourses(@RequestBody CoursesRequestDto dto){
-        log.info("CoursesController: saveCourses STARTED");
-        log.info("CoursesRequestDto -> {}",dto);
         return ResponseEntity.ok(coursesService.saveCourses(dto));
     }
 
@@ -39,6 +36,11 @@ public class CoursesController {
         return ResponseEntity.ok(coursesService.deleteCourse(id));
     }
 
+    @GetMapping
+    public ResponseEntity<List<CoursesResponseDto>> findAllCourses(){
+        return ResponseEntity.ok(coursesService.findAllCourses());
+    }
+
     @GetMapping("/name")
     public ResponseEntity<CoursesResponseDto> findCourseByCourseName(@RequestParam String name){
         log.info("CoursesController: findCourseByCourseName STARTED");
@@ -46,16 +48,25 @@ public class CoursesController {
         return ResponseEntity.ok(coursesService.findCourseByCourseName(name));
     }
 
-    @GetMapping
-    public ResponseEntity<List<CoursesResponseDto>> findAllCourses(){
-        return ResponseEntity.ok(coursesService.findAllCourses());
-    }
-
     @GetMapping("/joinedStudentInCourse")
     public ResponseEntity<String> joinedStudentInCourse(@RequestParam Long courseId,@RequestParam Long[] studentId){
         return ResponseEntity.ok(coursesService.joinedStudentInCourse(courseId,studentId));
     }
 
+    @GetMapping("/findCoursesOfStudentsById")
+    public ResponseEntity<List<CoursesResponseDto>> findCoursesOfStudentsById(@RequestParam Long id){
+        return ResponseEntity.ok(coursesService.findCoursesOfStudentsById(id));
+    }
+
+    @GetMapping("/findCoursesOfTeacherByName")
+    public ResponseEntity<List<CoursesResponseDto>> findCoursesOfTeacherById(@RequestParam String name){
+        return ResponseEntity.ok(coursesService.findCoursesOfTeacherByName(name));
+    }
+
+    @GetMapping("/findCoursesOfAcademyByName")
+    public ResponseEntity<List<CoursesResponseDto>> findCoursesOfAcademyByName(@RequestParam String name){
+        return ResponseEntity.ok(coursesService.findCoursesOfAcademyByName(name));
+    }
 
 
 

@@ -13,11 +13,11 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "students")
-@ToString
 public class Students implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(unique = true)
     Long id;
     String name;
     String surname;
@@ -25,12 +25,7 @@ public class Students implements Serializable {
 
 
     @JsonBackReference
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "students_courses",
-            joinColumns = @JoinColumn(name = "student_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id")
-    )
+    @ManyToMany(mappedBy = "students")
     List<Courses> courses;
 
 

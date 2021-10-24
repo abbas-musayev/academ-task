@@ -26,10 +26,13 @@ public class CoursesRequestDto  implements Serializable {
     @JsonFormat(pattern = "dd-MM-yyyy")
     LocalDate expirationDate;
 
+    @ToString.Exclude
     TeachersRequestDto teachers;
 
+    @ToString.Exclude
     List<StudentsRequestDto> students;
 
+    @ToString.Exclude
     AcademyRequestDto academy;
 
 

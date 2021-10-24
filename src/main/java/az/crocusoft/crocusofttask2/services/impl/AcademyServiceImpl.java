@@ -25,9 +25,7 @@ public class AcademyServiceImpl implements AcademyService {
     @Override
     public String saveAcademy(AcademyRequestDto request) {
         log.info("AcademyServiceImpl: SaveAcademy Started");
-
         academyRepo.save(modelMapper.map(request,Academy.class));
-
         return "Academy Saved";
     }
 

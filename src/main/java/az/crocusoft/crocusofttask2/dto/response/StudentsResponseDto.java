@@ -1,6 +1,7 @@
 package az.crocusoft.crocusofttask2.dto.response;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.ToString;
 
 import java.util.List;
@@ -11,6 +12,8 @@ public class StudentsResponseDto {
     String surname;
     String email;
 
+    @ToString.Exclude
+    @JsonBackReference
     List<CoursesResponseDto> courses;
 
     public StudentsResponseDto(String name,

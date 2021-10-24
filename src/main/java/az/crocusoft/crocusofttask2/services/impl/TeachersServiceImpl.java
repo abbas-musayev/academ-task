@@ -1,6 +1,7 @@
 package az.crocusoft.crocusofttask2.services.impl;
 
 import az.crocusoft.crocusofttask2.dao.entity.Courses;
+import az.crocusoft.crocusofttask2.dao.entity.Students;
 import az.crocusoft.crocusofttask2.dao.entity.Teachers;
 import az.crocusoft.crocusofttask2.dao.repository.CoursesRepo;
 import az.crocusoft.crocusofttask2.dao.repository.TeachersRepo;
@@ -10,6 +11,7 @@ import az.crocusoft.crocusofttask2.dto.response.TeachersResponseDto;
 import az.crocusoft.crocusofttask2.exception.CustomNotFoundException;
 import az.crocusoft.crocusofttask2.services.TeachersService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,16 +38,6 @@ public class TeachersServiceImpl implements TeachersService {
         log.info("TeachersServiceImpl: saveTeachers STARTED");
 
         Teachers teachers = modelMapper.map(request, Teachers.class);
-        List<Courses> coursesList = new ArrayList<>();
-        for (CoursesRequestDto item : request.getCourses()) {
-            coursesList.add(
-                    coursesRepo.findById(item.getId())
-                    .orElseThrow(() -> new CustomNotFoundException("Course Id is Null")));
-        }
-        log.info("TeachersServiceImpl: SAVE CoursesList {}",coursesList);
-
-        teachers.setCourses(coursesList);
-
         log.info("TeachersServiceImpl: SAVE TeachersList {}",teachers);
 
         teachersRepo.save(teachers);
@@ -54,45 +46,36 @@ public class TeachersServiceImpl implements TeachersService {
 
     @Override
     public String updateTeachers(TeachersRequestDto request) {
-        if (request.getId()==null){
+        if (request.getId()==null || request.getId()==0){
             throw new CustomNotFoundException("Teachers Id is Null!");
         }
-
         Teachers teachers = modelMapper.map(request, Teachers.class);
-        List<Courses> coursesList = new ArrayList<>();
 
-        for (CoursesRequestDto item : request.getCourses()) {
-            coursesList.add(
-                    coursesRepo.findById(item.getId())
-                            .orElseThrow(() -> new CustomNotFoundException("Course Id is Null")));
+        List<Courses> coursesOfStudents = coursesRepo.findCoursesOfStudentsById(request.getId());
+        for (Courses item : teachers.getCourses()) {
+                if (item.getId()!=null){
+                    Courses byId = (Courses) Hibernate.unproxy(coursesRepo.getById(item.getId()));
+                    coursesOfStudents.add(byId);
+                }
         }
-        log.info("TeachersServiceImpl: UPDATE CoursesList {}",coursesList);
 
-        teachers.setCourses(coursesList);
-
-        log.info("TeachersServiceImpl: UPDATE TeachersList {}",teachers);
-
-        teachersRepo.save(teachers);
+        teachers.setCourses(coursesOfStudents);
+        Teachers save = teachersRepo.save(teachers);
+        log.info("TeachersServiceImpl: UPDATE TeachersList {}",save);
         return "Teacher Updated!";
 
     }
 
 
     @Override
-    public List<TeachersResponseDto> findAllTeachersByCoursesName(String name){
-        List<Teachers> list = teachersRepo.findAllTeachersByCoursesName(name);
-        List<TeachersResponseDto> response =new ArrayList<>();
-
-        if (response.isEmpty()){
+    public TeachersResponseDto findTeachersByCoursesName(String name){
+        Teachers entities = teachersRepo.findAllTeachersByCoursesName(name);
+        if (entities==null){
             throw new CustomNotFoundException("Course of Teachers Not Found");
         }
-
-        for (Teachers item : list) {
-            response.add(modelMapper.map(item,TeachersResponseDto.class));
-        }
+        TeachersResponseDto response = modelMapper.map(entities, TeachersResponseDto.class);
         log.info("TeachersServiceImpl:findAllTeachersByCourseName : {}",response);
-
         return response;
-
     }
+
 }

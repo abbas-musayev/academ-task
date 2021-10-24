@@ -56,23 +56,22 @@ public class StudentsServiceImpl implements StudentsService {
 
     @Override
     public String updateStudents(StudentsRequestDto request) {
+        if (request.getId()==null || request.getId().equals(0L))
+            throw new CustomNotFoundException("Course Id is Null!");
 
-        if (request.getId()==null){
-            return "Student Id is Null!";
-        }
+        List<Courses> coursesOfStudents = coursesRepo.findCoursesOfStudentsById(request.getId());
+
         Students map = modelMapper.map(request, Students.class);
 
-        List<CoursesRequestDto> courses = request.getCourses();
-        List<Courses> list = new ArrayList<>();
-        for (CoursesRequestDto item : courses) {
-            list.add(
-                    coursesRepo.findById(item.getId())
-                            .orElseThrow(()-> new CustomNotFoundException("Course Id is Null!")));
+        for (Courses item : map.getCourses()) {
+            if (item.getId()!=null){
+                Courses byId = coursesRepo.getById(item.getId());
+                coursesOfStudents.add(byId);
+            }
         }
-        map.setCourses(list);
+        map.setCourses(coursesOfStudents);
         studentsRepo.save(map);
         return "Students Updated";
-
     }
 
     @Override
@@ -82,6 +81,18 @@ public class StudentsServiceImpl implements StudentsService {
         Students studentsByNameAndSurname = studentsRepo.findStudentsByNameAndSurname(name, surname);
         log.info("Finded Student : {}",studentsByNameAndSurname);
         return modelMapper.map(studentsByNameAndSurname,StudentsResponseDto.class);
+    }
+
+    @Override
+    public List<StudentsResponseDto> findStudentsOfCourseById(Long id) {
+        List<Students> studentsOfCourse = studentsRepo.findStudentsOfCourseById(id);
+
+        List<StudentsResponseDto> list = new ArrayList<>();
+
+        for (Students item : studentsOfCourse) {
+            list.add(modelMapper.map(item,StudentsResponseDto.class));
+        }
+        return list;
     }
 
 

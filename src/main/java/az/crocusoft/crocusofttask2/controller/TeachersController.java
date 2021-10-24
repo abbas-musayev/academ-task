@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/teachers")
 public class TeachersController {
@@ -28,10 +26,15 @@ public class TeachersController {
         return ResponseEntity.ok(teachersService.saveTeachers(request));
     }
 
-    @GetMapping("/allcourse")
-    public ResponseEntity<List<TeachersResponseDto>> findAllTeachersByCoursesName(@RequestParam String name){
+    @PutMapping
+    public ResponseEntity<String> updateTeachers(@RequestBody TeachersRequestDto request){
+        return ResponseEntity.ok(teachersService.updateTeachers(request));
+    }
+
+    @GetMapping("/teachersByCourseName")
+    public ResponseEntity<TeachersResponseDto> findAllTeachersByCoursesName(@RequestParam String name){
         log.info("TeachersController: findAllTeachersByCoursesName STARTED");
-        return ResponseEntity.ok(teachersService.findAllTeachersByCoursesName(name));
+        return ResponseEntity.ok(teachersService.findTeachersByCoursesName(name));
     }
 
 }

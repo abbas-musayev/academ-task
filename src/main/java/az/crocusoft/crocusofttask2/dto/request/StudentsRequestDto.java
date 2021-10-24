@@ -16,5 +16,7 @@ public class StudentsRequestDto {
     String name;
     String surname;
     String email;
+
+    @ToString.Exclude
     List<CoursesRequestDto> courses;
 }

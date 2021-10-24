@@ -24,4 +24,15 @@ public interface CoursesRepo extends JpaRepository<Courses,Long> {
     @Query("select c from Courses c join fetch c.students s where s.name=:name")
     List<Courses> findCoursesByStudentsName(@Param("name") String studentsName);
 
+    @Query("select c from Courses c join fetch c.students s where s.id=:id")
+    List<Courses> findCoursesOfStudentsById(@Param("id") Long id);
+
+    @Query("select c from Courses c join fetch c.teachers t where t.id=:id")
+    List<Courses> findCoursesOfTeacherById(@Param("id") Long id);
+
+    @Query("select c from Courses c join fetch c.teachers t where t.name=:name")
+    List<Courses> findCoursesOfTeachersByName(@Param("name") String name);
+
+    @Query("select c from Courses c join fetch c.academy a where a.name like %:name%")
+    List<Courses> findCoursesOfAcademyByName(@Param("name") String name);
 }
