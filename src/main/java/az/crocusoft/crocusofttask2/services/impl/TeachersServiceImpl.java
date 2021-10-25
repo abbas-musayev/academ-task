@@ -49,11 +49,14 @@ public class TeachersServiceImpl implements TeachersService {
         if (request.getId()==null || request.getId()==0){
             throw new CustomNotFoundException("Teachers Id is Null!");
         }
+
         Teachers teachers = modelMapper.map(request, Teachers.class);
 
         List<Courses> coursesOfStudents = coursesRepo.findCoursesOfStudentsById(request.getId());
         for (Courses item : teachers.getCourses()) {
                 if (item.getId()!=null){
+//                    Hibernate.unproxy etmek FetchType Lazy olduqda gelen data initializer olunmur
+//                    ve biz hemin datani ozumuz initializer edirik.
                     Courses byId = (Courses) Hibernate.unproxy(coursesRepo.getById(item.getId()));
                     coursesOfStudents.add(byId);
                 }

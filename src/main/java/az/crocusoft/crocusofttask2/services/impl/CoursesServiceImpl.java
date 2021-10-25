@@ -123,6 +123,8 @@ public class CoursesServiceImpl implements CoursesService {
 //        Requestden gelen studentlerin Id-sine gore axtaris edirik ve StudentsOfCourse add edirik
         for (Students item : map.getStudents()) {
             if (item.getId()!=null){
+//              Hibernate.unproxy etmek FetchType Lazy olduqda gelen data initializer olunmur
+//              ve biz hemin datani ozumuz initializer edirik.
                 Students byId = (Students) Hibernate.unproxy(studentsRepo.getById(item.getId()));
                 studentsOfCourse.add(byId);
             }
@@ -132,11 +134,13 @@ public class CoursesServiceImpl implements CoursesService {
             Teachers teachers = teachersRepo.findById(map.getTeachers().getId()).get();
             map.setTeachers(teachers);
         }
+//        Requestde gelen Academy Id-sinin olub olmadigini yoxluyub Null deyilse gedib Id-sine gore axtaririq
         if (map.getAcademy().getId()!=null || map.getAcademy().getId()==0){
             Academy academy = academyRepo.findById(map.getAcademy().getId()).orElse(new Academy());
             map.setAcademy(academy);
         }
 
+//        Ve sonda gedib Coursu Save edirik(Update)
         log.info("CoursesServiceImpl: SaveCourses: Courses Entity {}",map);
         coursesRepo.save(map);
 
@@ -169,6 +173,8 @@ public class CoursesServiceImpl implements CoursesService {
 
     @Override
     public String deleteCourse(Long id) {
+//        Islemeye biler cunki relation var Course ile diger Entityler arasinda
+//        Gere is_delete fieldi elave edilsin ve statusu True ederik
         if (id==null){
             return "Id is Null!";
         }
