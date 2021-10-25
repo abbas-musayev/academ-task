@@ -12,6 +12,7 @@ import java.util.List;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@ToString
 @Table(name = "students")
 public class Students implements Serializable {
 
@@ -23,7 +24,7 @@ public class Students implements Serializable {
     String surname;
     String email;
 
-
+    @ToString.Exclude
     @JsonBackReference
     @ManyToMany(mappedBy = "students")
     List<Courses> courses;

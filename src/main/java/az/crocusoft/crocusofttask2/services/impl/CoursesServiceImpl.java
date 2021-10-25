@@ -56,7 +56,7 @@ public class CoursesServiceImpl implements CoursesService {
 
     @Override
     public CoursesResponseDto findCourseByCourseName(String name) {
-        log.info("CoursesServiceImpl: findCourseByCourseName STARTED");
+        log.info("CoursesServiceImpl: findCourseByCourseName STARTED -> {}",name);
         Courses coursesByName = coursesRepo.findCoursesByName(name);
         log.info("CoursesServiceImpl: coursesByName -> {}",coursesByName);
         return modelMapper.map(coursesByName,CoursesResponseDto.class);
@@ -111,20 +111,23 @@ public class CoursesServiceImpl implements CoursesService {
 
     @Override
     public String updateCourses(CoursesRequestDto request) {
-
+//      Kursun Id-sini yoxluyuruq Null veya 0 gelerse exception throw edirik
         if (request.getId()==null || request.getId().equals(0L))
             throw new CustomNotFoundException("Course Id is Null!");
 
+//      Kursun Id-sine gore Kursun daxilinde olan butun studentleri tapiriq
         List<Students> studentsOfCourse = studentsRepo.findStudentsOfCourseById(request.getId());
 
         Courses map = modelMapper.map(request, Courses.class);
 
+//        Requestden gelen studentlerin Id-sine gore axtaris edirik ve StudentsOfCourse add edirik
         for (Students item : map.getStudents()) {
             if (item.getId()!=null){
                 Students byId = (Students) Hibernate.unproxy(studentsRepo.getById(item.getId()));
                 studentsOfCourse.add(byId);
             }
         }
+//        Requestde gelen Teacherin Id-sinin olub olmadigini yoxluyub Null deyilse gedib Id-sine gore axtaririq
         if (map.getTeachers().getId()!=null){
             Teachers teachers = teachersRepo.findById(map.getTeachers().getId()).get();
             map.setTeachers(teachers);
@@ -143,20 +146,24 @@ public class CoursesServiceImpl implements CoursesService {
     @Override
     public String joinedStudentInCourse(Long courseId, Long[] studentId) {
 
+//        Kursun Id-sine gore axtaris verilir ve tapilmasa error throw edilir
         Courses courses = coursesRepo.findById(courseId).orElseThrow(
                 ()-> new CustomNotFoundException("Course Not Found ID: "+courseId));
 
-        List<Students> list = new ArrayList<>();
+//        Gelen Student Id-lerinin Obyektlerini tapib liste yigmaq ucun Bu Kursun Studentlerini tapiriq ve set edirik
+        List<Students> studentsOfCourse = studentsRepo.findStudentsOfCourseById(courseId);
 
+//        Gelen Id-leri loop-a salib yoxluyuruq data var ya yox ve sonra List-in icerisine yigiriq
         for (Long item : studentId) {
             Students students = studentsRepo.findById(item).orElseThrow(
                     () -> new CustomNotFoundException("Course Not Found ID: " + item));
-            list.add(students);
+            studentsOfCourse.add(students);
         }
 
-        courses.setStudents(list);
-        log.info("CourseServiceImpl: joinedStudentInCourse : CourseName,StudentName {},{}",courses.getName(),list);
-
+//      Daha sonra course-un studentlerine elave edirik
+        courses.setStudents(studentsOfCourse);
+        log.info("CourseServiceImpl: joinedStudentInCourse : CourseName,StudentName {},{}",courses.getName(),studentsOfCourse);
+        coursesRepo.save(courses);
         return "Successfull joinedStudentInCourse";
     }
 

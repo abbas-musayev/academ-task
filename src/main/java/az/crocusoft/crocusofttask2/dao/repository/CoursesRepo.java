@@ -11,18 +11,19 @@ import java.util.List;
 @Repository
 public interface CoursesRepo extends JpaRepository<Courses,Long> {
 
-//    Kursun adina gore axtaris
-    @Query("select c from Courses c join fetch c.students join fetch c.teachers where c.name=:name")
-    Courses findCoursesByName(@Param("name") String CourseName);
 
+//    Kursun adina gore axtaris
+    @Query("select c from Courses c join fetch c.students s join fetch c.teachers t where c.name=:name")
+//    @Query("select c from Courses  c where c.name=:name")
+    Courses findCoursesByName(@Param("name") String name);
 
 //   Bir muellimin adina gore  ders kecdiyi butun kurslarin tapilmasi
     @Query("select c from Courses  c join fetch c.teachers t where t.name=:name")
-    List<Courses> findCoursesByTeacherName(@Param("name") String teacherName);
+    List<Courses> findCoursesByTeacherName(@Param("name") String name);
 
 
     @Query("select c from Courses c join fetch c.students s where s.name=:name")
-    List<Courses> findCoursesByStudentsName(@Param("name") String studentsName);
+    List<Courses> findCoursesByStudentsName(@Param("name") String name);
 
     @Query("select c from Courses c join fetch c.students s where s.id=:id")
     List<Courses> findCoursesOfStudentsById(@Param("id") Long id);

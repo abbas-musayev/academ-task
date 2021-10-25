@@ -2,6 +2,7 @@ package az.crocusoft.crocusofttask2.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,14 +24,14 @@ public class CoursesResponseDto {
     LocalDate expirationDate;
 
     @ToString.Exclude
-    @JsonBackReference
+    @JsonManagedReference
     TeachersResponseDto teachers;
 
     @ToString.Exclude
-    @JsonBackReference
+    @JsonManagedReference
     List<StudentsResponseDto> students;
 
     @ToString.Exclude
-    @JsonBackReference
+    @JsonManagedReference
     AcademyResponseDto academy;
 }

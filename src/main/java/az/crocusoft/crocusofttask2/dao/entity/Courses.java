@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@ToString
 @Table(name = "courses")
 public class Courses {
     @Id
@@ -23,12 +24,14 @@ public class Courses {
     LocalDate startDate;
     LocalDate expirationDate;
 
-    @JsonBackReference
+    @ToString.Exclude
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teachers",referencedColumnName = "id")
     Teachers teachers;
 
-    @JsonBackReference
+    @ToString.Exclude
+    @JsonManagedReference
     @ManyToMany()
     @JoinTable(
             name = "course_student",

@@ -11,6 +11,7 @@ import java.util.List;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@ToString
 @Table(name = "teachers")
 public class Teachers implements Serializable {
 
